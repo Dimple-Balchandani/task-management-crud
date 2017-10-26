@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>Task Management</title>
+<script src="angular.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="style.css" rel="stylesheet" type="text/css" media="all" />
+ <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+<script src="script.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+<script type="text/javascript" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.6.0.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl" ng-cloak>
+<table class="table" cellpadding="10" cellspacing="5">
+	<tr>
+       <th>Channel List/Built</th>
+		<th>Owner</th>
+		<th>Time  Started</th>
+		<th>State</th>
+		<th>Metrics</th>
+		<th>Built</th>
+		<th>Unit Test</th>
+		<th>Functional Test</th>
+		<th>Action</th> 
+	</tr>
+
+	<tr ng-repeat="task in tasks track by $index" ng-model="current_row" ng-controller="taskCtrl" ng-init="indexFunc($index)">
+		<td>{{task.task_name}}</td>
+		<td>{{task.owner}}</td>
+		<td>{{task.date | date:'medium' }}</td>
+		<td>{{task.state}}</td>
+		<td><div class="progress">
+    		<div class="progress-bar progress-bar-striped active progress-bar-success"  ng-style="myStyle_success"></div>
+  			</div>
+  		</td>
+		<td><div class="progress">
+    		<div class="progress-bar progress-bar-striped active progress-bar-info"  ng-style="myStyle_info"></div>
+  			</div>
+  		</td>
+		<td><div class="progress">
+    		<div class="progress-bar progress-bar-striped active progress-bar-warning"  ng-style="myStyle_warning"></div>
+  			</div>
+  		</td>
+		<td><div class="progress">
+    		<div class="progress-bar progress-bar-striped active progress-bar-danger" ng-style="myStyle_danger"></div>
+  			</div>
+  		</td>
+		<td><md-button class="md-raised md-primary" ng-click="cancel($index)" ng-if="my_action($index)==0 && !flag" >{{task.actions}}</md-button>
+			<md-button class="md-accent md-raised md-hue-1" ng-click="clear(task.task_name)" ng-if="my_action($index)==1">{{task.actions}}</md-button>
+		<md-button class="md-raised md-warn"ng-click="resume($index)" ng-if="flag">Resume</md-button></td>
+		
+	</tr>
+</table>
+			
+
+<div  layout="column" ng-cloak>
+  <md-content layout-padding>
+    <form name="projectForm">
+      <div style="width:50%;display:inline-block">
+      <md-input-container class="md-block">
+        <label>Add Task</label>
+        <input required name="task_name" ng-model="task_name">
+        <div ng-messages="projectForm.task_name.$error">
+          <div ng-message="required">This field is required and should be unique task name</div>
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <label>Owner</label>
+        <input required name="owner" ng-model="owner"/>
+        <div ng-messages="projectForm.owner.$error" role="alert">
+          <div ng-message-exp="['required']">
+            This is required.
+          </div>
+        </div>
+      </md-input-container>
+      </div>
+      <div >
+      	<md-button class="md-raised md-primary" ng-click="addRow()">Start</md-button>
+	<p style="color:red">{{errortext}}</p>
+    </div>
+ 
+      </form>
+  </md-content>
+</div>
+
+</body>
+</html>
